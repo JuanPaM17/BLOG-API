@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Publicaciones</title>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div th:replace="~{@{/administrador/components/menuNavbar.html}}"></div>
+        <div class="container m-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success" role="alert">
+                        <span>Grupos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <input id="msg" type="hidden" th:value="${msg}">
+                    <button id="btnAgregarCategoria" class="btn btn-primary m-3">Agregar un nuevo grupo</button>
+                    <!-- Button trigger modal -->
+                    <button id="btnVerPermisos" type="button" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#quitarPermiso">
+                        Ver Permisos
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="quitarPermiso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Permiso - Quitar</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+                                            <tr th:each="permiso : ${listaPermisoGrupo}">
+                                                <th th:text="${permiso.id_grupo_permiso}" scope="row">id</th>
+                                                <td th:text="${permiso.nombre_permiso}">nombre</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning m-1">
+                                                        <a class="text-white text-decoration-none" th:href="@{/admin/grupo/delete/permiso/}+${permiso.id_grupo_permiso}" >Eliminar</a>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btnAddPermisos" type="button" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#ponerPermiso">
+                        Añadir Permisos
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="ponerPermiso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Permiso - Agregar</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+                                            <tr th:each="permiso : ${listaPermisoGrupoIdNoTiene}">
+                                                <th th:text="${permiso.id_grupo_permiso}" scope="row">id</th>
+                                                <td th:text="${permiso.nombre_permiso}">nombre</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-success m-1">
+                                                        <a class="text-white text-decoration-none" th:href="@{/admin/grupo/add/permiso/}+${permiso.id_grupo_permiso}+'/'+${permiso.nombre_permiso}" >Agregar</a>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divForm">
+                        <form th:action="@{/admin/grupo}" method="POST" th:object="${grupo}">
+                            <div style="display: none" class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">#</span>
+                                <input readonly="" required="" th:field="*{id_grupo}" th:value="*{id_grupo}" type="text" class="form-control" placeholder="Id Grupo" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">N</span>
+                                <input required="" th:field="*{nombre}" th:value="*{nombre}" type="text" class="form-control" placeholder="Nombre" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                            <button type="submit" class="btn btn-primary m-3">Guardar</button>
+                            <button type="reset" class="btn btn-primary">Borrar Datos</button>
+                            <button id="btnCancelarCategoria" class="btn btn-primary">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <tr th:each="grupo : ${listaGrupos}">
+                                <th th:text="${grupo.id_grupo}" scope="row">id</th>
+                                <td th:text="${grupo.nombre}">nombre</td>
+                                <td>
+                                    <button type="button" class="btn btn-info m-1">
+                                        <a th:href="@{/admin/grupo/update/}+${grupo.id_grupo}" >Actualizar</a>
+                                    </button>
+                                    <button type="button" class="btn btn-info m-1">
+                                        <a th:href="@{/admin/grupo/}+${grupo.id_grupo}" >Eliminar</a>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{@{/administrador/components/style.html}}"></div>
+        <script>
+
+            const msg = document.getElementById('msg').value;
+            const divFormulario = document.getElementById('divForm');
+            const btnAgregarCategoria = document.getElementById('btnAgregarCategoria');
+            const btnVerPermisos = document.getElementById('btnVerPermisos');
+            const btnAddPermisos = document.getElementById('btnAddPermisos');
+            btnVerPermisos.style.display = "none";
+            btnAddPermisos.style.display = "none";
+
+            if (msg === "update") {
+                divFormulario.style.display = "";
+                btnVerPermisos.style.display = "";
+                btnAddPermisos.style.display = "";
+                btnAgregarCategoria.style.display = "none";
+            } else {
+                divFormulario.style.display = "none";
+            }
+
+            btnAgregarCategoria.addEventListener('click', function (event) {
+                event.preventDefault();
+                btnAgregarCategoria.style.display = "none";
+                divFormulario.style.display = "";
+            });
+
+            const btnCancelarCategoria = document.getElementById('btnCancelarCategoria');
+
+            btnCancelarCategoria.addEventListener('click', function (event) {
+                event.preventDefault();
+                divFormulario.style.display = "none";
+                btnAgregarCategoria.style.display = "";
+                btnVerPermisos.style.display = "none";
+                btnAddPermisos.style.display = "none";
+            });
+        </script>
+</html>
